@@ -1,7 +1,5 @@
 <<<<<<< HEAD
-# MobileNetV2-CIFAR10
-MobileNetV2 CIFAR10 compression
-=======
+
 # CS6886 Assignment 3 – MobileNetV2 Compression
 
 ## Train Baseline
