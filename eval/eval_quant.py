@@ -46,5 +46,5 @@ if __name__ == "__main__":
     criterion = nn.CrossEntropyLoss()
     val_loss, val_acc = evaluate(model, testloader, criterion, device)
 
-    print(f"Accuracy: {val_acc:.4f} | Loss: {val_loss:.4f}")
+    print(f"Accuracy: {val_acc*100:.4f} | Loss: {val_loss:.4f}")
 
