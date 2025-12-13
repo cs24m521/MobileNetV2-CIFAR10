@@ -65,14 +65,14 @@ def main(cfg):
         val_loss, val_acc = evaluate(model, testloader, criterion, device)
         scheduler.step()
 
-        print(f"[Epoch {epoch}] Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
+        print(f"[Epoch {epoch}] Train Acc: {train_acc*100:.4f} | Val Acc: {val_acc*100:.4f}")
 
         wandb.log({
             "epoch": epoch,
             "train_loss": train_loss,
-            "train_acc": train_acc,
+            "train_acc": train_acc*100,
             "val_loss": val_loss,
-            "val_acc": val_acc,
+            "val_acc": val_acc*100,
             "lr": scheduler.get_last_lr()[0]
         })
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
         "seed": 42,
         "batch_size": 128,
         "lr": 0.1,
-        "epochs": 5,   # change to 120 for full training
+        "epochs": 120,   # change to 120 for full training
         "width_mult": 1.0,
         "wandb_project": "mobilenetv2_cifar10_compression"
     }
