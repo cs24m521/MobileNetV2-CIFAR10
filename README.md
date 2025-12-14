@@ -7,12 +7,18 @@ This project implements **post-training quantization** of **MobileNet-V2** on **
 * Python: **3.10**
 
 ## Dependencies
+All dependencies are listed in requirements.txt.
+
 ```bash
-pip install torch==2.1.0 torchvision==0.16.0
-pip install wandb==0.23.1
-pip install numpy==1.26.4
-pip install matplotlib==3.8.0
-pip install pyyaml==6.0.1
+pip install -r requirements.txt
+
+Versions:
+torch 2.1.0
+torchvision 0.16.0
+wandb 0.23.1
+numpy 1.26.4
+matplotlib 3.8.0
+pyyaml 6.0.1
 ```
 ## Dataset
 * CIFAR-10 (auto-downloaded via `torchvision`)
@@ -24,10 +30,13 @@ train/         Baseline training + evaluation
 eval/          Quantized evaluation
 compression/   Weight & activation quantization
 data/          CIFAR-10 loader
+utils/         Helper utilities
 checkpoints/   Baseline model (.pth)
 sweep.yaml     WandB sweep config
 sweep_run.py   Sweep execution
 main.py        Entry point
+requirements.txt
+README.md
 ```
 
 ## Baseline Training
