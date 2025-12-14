@@ -14,12 +14,17 @@ pip install -r requirements.txt
 ```
 
 Versions:
-*torch 2.1.0
-*torchvision 0.16.0
-*wandb 0.23.1
-*numpy 1.26.4
-*matplotlib 3.8.0
-*pyyaml 6.0.1
+torch 2.1.0
+
+torchvision 0.16.0
+
+wandb 0.23.1
+
+numpy 1.26.4
+
+matplotlib 3.8.0
+
+pyyaml 6.0.1
 
 ## Dataset
 * CIFAR-10 (auto-downloaded via `torchvision`)
