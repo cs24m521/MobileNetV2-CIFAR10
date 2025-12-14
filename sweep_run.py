@@ -12,6 +12,17 @@ import torch.nn as nn
 import pickle
 import os
 
+def compute_model_size_mb(model, weight_bits):
+    total_params = 0
+    for p in model.parameters():
+        total_params += p.numel()
+
+    # Weight storage only (quantized)
+    size_bytes = total_params * weight_bits / 8
+
+    return size_bytes / (1024 * 1024)
+
+
 def load_quantized_weights(model, qdict, meta):
     state = model.state_dict()
     new_state = {}
