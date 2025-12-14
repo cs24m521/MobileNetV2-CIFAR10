@@ -31,6 +31,10 @@ def main():
     wandb.init()
     cfg = wandb.config
 
+    wandb.define_metric("model_size_mb")
+    wandb.define_metric("val_acc", summary="max")
+    wandb.define_metric("compression_ratio")
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # Load data
