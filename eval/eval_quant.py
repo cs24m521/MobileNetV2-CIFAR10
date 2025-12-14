@@ -6,15 +6,20 @@ from compression.quantize import dequantize_symmetric
 from data.load_cifar10 import get_cifar10
 import torch.nn as nn
 
+def compute_model_size_mb(model, weight_bits):
+    total_params = sum(p.numel() for p in model.parameters())
+    size_bytes = total_params * weight_bits / 8
+    return size_bytes / (1024 * 1024)
+
 def load_quantized_weights(model, qdict, meta):
     new_state = {}
 
     for k, v in model.state_dict().items():
-        if k in qdict and "scale" in meta.get(k + "_scale", {}):
+        if k in qdict and (k + "_scale") in meta:
             scale = meta[k + "_scale"]
             new_state[k] = dequantize_symmetric(qdict[k], scale)
         else:
-            new_state[k] = qdict.get(k, v)
+            new_state[k] = v
 
     model.load_state_dict(new_state, strict=False)
     return model
@@ -45,6 +50,7 @@ if __name__ == "__main__":
 
     criterion = nn.CrossEntropyLoss()
     val_loss, val_acc = evaluate(model, testloader, criterion, device)
+    model_size_mb = compute_model_size_mb(model, args.weight_bits)
 
     print(f"Accuracy: {val_acc*100:.4f} | Loss: {val_loss:.4f}")
 
