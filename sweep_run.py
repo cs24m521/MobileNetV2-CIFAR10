@@ -12,6 +12,21 @@ import torch.nn as nn
 import pickle
 import os
 
+def load_quantized_weights(model, qdict, meta):
+    state = model.state_dict()
+    new_state = {}
+
+    for k, v in state.items():
+
+        if k in qdict and meta.get(k + "_scale") is not None:
+            scale = meta[k + "_scale"]
+            new_state[k] = dequantize_symmetric(qdict[k], scale)
+        else:
+            new_state[k] = v
+
+    model.load_state_dict(new_state, strict=False)
+    return model
+
 def main():
     wandb.init()
     cfg = wandb.config
