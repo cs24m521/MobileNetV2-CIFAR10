@@ -69,7 +69,8 @@ print(
     f"Acc={val_acc*100:.2f}% | "
     f"Model Size={model_size_mb:.2f} MB"
 )
-    wandb.finish()
+    
+wandb.finish()
 
 if __name__ == "__main__":
     main()
