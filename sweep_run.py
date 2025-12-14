@@ -56,18 +56,19 @@ def main():
     compression_ratio = 32 / cfg.weight_bits
 
     wandb.log({
-        "weight_bits": cfg.weight_bits,
-        "act_bits": cfg.act_bits,
-        "val_acc": val_acc * 100,
-        "val_loss": val_loss,
-        "compression_ratio": compression_ratio
-    })
+    "weight_bits": args.weight_bits,
+    "act_bits": args.act_bits,
+    "val_acc": val_acc * 100,
+    "val_loss": val_loss,
+    "compression_ratio": 32 / args.weight_bits,
+    "model_size_mb": model_size_mb
+})
 
-    print(
-        f"W={cfg.weight_bits}, A={cfg.act_bits} | "
-        f"Val Acc={val_acc*100:.2f}% | CR={compression_ratio:.1f}x"
-    )
-
+print(
+    f"W={args.weight_bits}, A={args.act_bits} | "
+    f"Acc={val_acc*100:.2f}% | "
+    f"Model Size={model_size_mb:.2f} MB"
+)
     wandb.finish()
 
 if __name__ == "__main__":
