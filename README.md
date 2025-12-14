@@ -79,7 +79,6 @@ Seeds used: **42, 123**
 * `compression_ratio`
 * `model_size_mb`
 * `val_acc`
-* `val_loss`
 
 Used to generate the Parallel Coordinates plot in WandB.
 
