@@ -19,6 +19,8 @@ def symmetric_quantize_tensor(tensor, num_bits=8, per_channel=False, channel_dim
         return q, scale
 
 def dequantize_symmetric(q, scale):
+    if isinstance(scale, torch.Tensor) and q.ndim == 4:
+        scale = scale.view(q.size(0), 1, 1, 1)
     return q.float() * scale
 
 def asymmetric_quantize_tensor(tensor, num_bits=8):
