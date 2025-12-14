@@ -12,20 +12,6 @@ import torch.nn as nn
 import pickle
 import os
 
-def load_quantized_weights(model, qdict, meta):
-    state = model.state_dict()
-    new_state = {}
-
-    for k, v in state.items():
-        if k in qdict and k + "_scale" in meta:
-            scale = meta[k + "_scale"]
-            new_state[k] = dequantize_symmetric(qdict[k], scale)
-        else:
-            new_state[k] = v
-
-    model.load_state_dict(new_state, strict=False)
-    return model
-
 def main():
     wandb.init()
     cfg = wandb.config
@@ -42,7 +28,6 @@ def main():
 
     # Quantize weights
     qdict, meta = quantize_weights(base_ckpt, num_bits=cfg.weight_bits)
-
     model = load_quantized_weights(model, qdict, meta)
 
     # Quantize activations
@@ -52,25 +37,27 @@ def main():
     criterion = nn.CrossEntropyLoss()
     val_loss, val_acc = evaluate(model, testloader, criterion, device)
 
-    # Estimate compression ratio
-    compression_ratio = 32 / cfg.weight_bits
+    # Model size (MB)
+    total_params = sum(p.numel() for p in model.parameters())
+    model_size_mb = (total_params * cfg.weight_bits / 8) / (1024 * 1024)
 
+    # Log to WandB
     wandb.log({
-    "weight_bits": cfg.weight_bits,
-    "act_bits": cfg.act_bits,
-    "val_acc": val_acc * 100,
-    "val_loss": val_loss,
-    "compression_ratio": 32 / cfg.weight_bits,
-    "model_size_mb": model_size_mb
-})
+        "weight_bits": cfg.weight_bits,
+        "act_bits": cfg.act_bits,
+        "val_acc": val_acc * 100,
+        "val_loss": val_loss,
+        "compression_ratio": 32 / cfg.weight_bits,
+        "model_size_mb": model_size_mb
+    })
 
-print(
-    f"W={cfg.weight_bits}, A={cfg.act_bits} | "
-    f"Acc={val_acc*100:.2f}% | "
-    f"Model Size={model_size_mb:.2f} MB"
-)
-    
-wandb.finish()
+    print(
+        f"W={cfg.weight_bits}, A={cfg.act_bits} | "
+        f"Acc={val_acc*100:.2f}% | "
+        f"Model Size={model_size_mb:.2f} MB"
+    )
+
+    wandb.finish()
 
 if __name__ == "__main__":
     main()
